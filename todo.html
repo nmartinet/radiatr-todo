@@ -1206,6 +1206,7 @@ window['components'] =
       return (
         <TodoEntry key={i}
                    todo={todo}
+                   q={q}
                    path={_path} />
       );
     });
@@ -1218,11 +1219,18 @@ window['components'] =
   }
 }`,
   "TodoEntry":  `{
+  onClick: function(){
+    let {todo, q, path} = this.props;
+    let newVal = todo.completed == '0' ? 1 : 0;
+    q.updateValue(path.concat('completed'), newVal);
+  },
   render: function(){
     let {todo, q} = this.props;
     return (
       <div>
-       {todo.name}
+        <a href="#" onClick={this.onClick}>
+            {todo.name}
+        </a>
       </div>
     )
   }
