@@ -252,6 +252,10 @@ window['data'] =
     {
       "name":  `New todo`,
       "completed":  `0`
+    } ,
+    {
+      "name":  `other task`,
+      "completed":  `0`
     } 
   ]
 } ;
@@ -1205,16 +1209,21 @@ window['components'] =
   render: function(){
     let {todos, q, path} = this.props;
     
-    let todoList = _.map(todos, function(todo, i){
-      let _path = path.concat(i);
-      return (
-        <TodoEntry key={i}
-                   todo={todo}
-                   q={q}
-                   path={_path} />
-      );
-    });
-    
+    let todoList = _(todos)
+      .map(function(todo, i){
+          let _path = path.concat(i)
+          return ({
+            ui: (<TodoEntry key={i} 
+                            todo={todo} 
+                            q={q} 
+                            path={_path}/>),   
+            completed: todo.completed
+          })
+      })
+      .orderBy(['completed'])
+      .map((td) => td.ui)
+      .value()
+      
     return (
       <div>
         {todoList}
