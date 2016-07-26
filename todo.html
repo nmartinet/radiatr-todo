@@ -1183,8 +1183,34 @@ window['components'] =
   }`,
   "TodoRoot":  `{
   render: function(){
+    let {data, q} = this.props;
     return (
-      <div>TodoRoot</div>
+      <div>
+        <h1>Radiatr Todo app</h1>
+        <NewTodo q={q} path={['todos']} />
+        <TodoList todos={data.todos} q={q} path={['todos']} />
+      </div>
+    )
+  }
+}`,
+  "TodoList":  `{
+  render: function(){
+    return (
+      <div>TodoList</div>
+    )
+  }
+}`,
+  "TodoEntry":  `{
+  render: function(){
+    return (
+      <div>TodoEntry</div>
+    )
+  }
+}`,
+  "NewTodo":  `{
+  render: function(){
+    return (
+      <div>NewTodo</div>
     )
   }
 }`
