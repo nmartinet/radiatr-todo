@@ -244,6 +244,10 @@ window['data'] =
     {
       "name":  `Finish Todo app`,
       "completed":  `0`
+    } ,
+    {
+      "name":  `New todo`,
+      "completed":  `0`
     } 
   ]
 } ;
@@ -1224,9 +1228,27 @@ window['components'] =
   }
 }`,
   "NewTodo":  `{
+  newTodo: function(name){
+    if(name == "") return;
+    let {q, path} = this.props;
+    
+    let newTodoValue = {
+        name: name,
+        completed: 0,
+    }
+    
+    q.addArray(path, newTodoValue);
+    
+    return "";  
+  },
   render: function(){
     return (
-      <div>NewTodo</div>
+      <div>
+        <TextInputButton
+            onClick={this.newTodo}
+            placeholder="new task"
+            buttonValue="add" />
+      </div>
     )
   }
 }`
