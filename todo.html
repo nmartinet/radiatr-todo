@@ -247,7 +247,7 @@ window['data'] =
   "todos":  [
     {
       "name":  `Finish Todo app`,
-      "completed":  `0`
+      "completed":  `1`
     } ,
     {
       "name":  `New todo`,
@@ -255,6 +255,10 @@ window['data'] =
     } ,
     {
       "name":  `other task`,
+      "completed":  `0`
+    } ,
+    {
+      "name":  `more stuff`,
       "completed":  `0`
     } 
   ]
@@ -329,16 +333,8 @@ window['components'] =
       return (
         <div className="cf">
 
-          <div className="fl w-50">
+          <div className="fl w-100">
             <Output data={self.state.data} q={self.state.funcs.data} />
-          </div>
-
-          <div className="fl w-50 pa3">
-            <h1 className="f1 tracked tr fw1 bb bw1 b--silver fw1">radiatr</h1>
-            <RadiatrControls data={self.state.data} />
-            <Tabs selected="0">
-              {dsEditors}
-            </Tabs>
           </div>
         </div>
       )
@@ -1197,10 +1193,11 @@ window['components'] =
   render: function(){
     let {data, q} = this.props;
     return (
-      <div>
+      <div className="mw9 center pa3 ph5-ns">
         <h1>Radiatr Todo app</h1>
         <NewTodo q={q} path={['todos']} />
         <TodoList todos={data.todos} q={q} path={['todos']} />
+        <SaveFileButton />
       </div>
     )
   }
@@ -1279,6 +1276,21 @@ window['components'] =
       </div>
     )
   }
+}`,
+  "SaveFileButton":  `{
+    onSave: function(){
+        saveToFile()
+    },
+    render: function(){
+        return (
+            <div>
+            <button className="btn" onClick={this.onSave} >
+                Save
+            </button>
+            </div>    
+        )
+    }
+    
 }`
 } ;
 </script>
