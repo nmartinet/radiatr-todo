@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>radiatr</title>
+<meta charset="utf-8" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.0.2/tachyons.min.css">
+<style type='text/css' id='app-css'>
+  .btn,
+  .btn:link,
+  .btn:visited {
+    border-style: solid;
+    border-width: 1px;
+    color: #111;
+    display: inline-block;
+    letter-spacing: .15em;
+    margin-bottom: .5em;
+    padding: 0.25em 1em;
+    text-decoration: none;
+    -webkit-transition: color .4s, background-color .4s, border .4s;
+            transition: color .4s, background-color .4s, border .4s;
+  }
+
+  .btn:hover {
+    color: #000;
+    border: 1px solid #000;
+    -webkit-transition: background-color .3s, color .3s, border .3s;
+            transition: background-color .3s, color .3s, border .3s;
+  }
+
+  .btn:active {
+    color: #000;
+    border: 1px solid #000;
+    -webkit-transition: background-color .3s, color .3s, border .3s;
+            transition: background-color .3s, color .3s, border .3s;
+  }
+
+
+  .inpt{
+    margin:3px;
+    border:0;
+    padding:2px;
+    display:inline-block;
+    vertical-align:middle;
+    white-space:normal;
+    background:none;
+    line-height:1;
+    border-bottom: 1px solid #aaa;
+    font-family:Arial;
+  }
+
+  .inpt:focus {
+    outline:0;
+    border-bottom: 1px solid #555;
+  }
+
+  .static { position: static; }
+  .relative { position: relative; }
+  .absolute { position: absolute; }
+  .fixed { position: fixed; }
+  @media screen and (min-width: 48em) {
+   .static-ns { position: static; }
+   .relative-ns { position: relative; }
+   .absolute-ns { position: absolute; }
+   .fixed-ns { position: fixed; }
+  }
+  @media screen and (min-width: 48em) and (max-width: 64em) {
+   .static-m { position: static; }
+   .relative-m { position: relative; }
+   .absolute-m { position: absolute; }
+   .fixed-m { position: fixed; }
+  }
+  @media screen and (min-width: 64em) {
+   .static-l { position: static; }
+   .relative-l { position: relative; }
+   .absolute-l { position: absolute; }
+   .fixed-l { position: fixed; }
+  }
+
+  .f7 {
+    font-size: .75rem;
+  }
+
+  .f8 {
+    font-size: .70rem;
+  }
+
+
+  .no-display {
+    display: none;
+  }
+
+
+
+  .menu{
+    text-align: left;
+    display: inline;
+    margin: 0;
+    padding: 15px 4px 17px 0;
+    list-style: none;
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    font: bold 12px/18px sans-serif;
+    display: inline-block;
+    margin-right: -4px;
+    position: relative;
+    padding: 15px 20px;
+    background: #fff;
+    cursor: pointer;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+  }
+
+  .menu:hover {
+    background: #555;
+    color: #fff;
+  }
+
+  .menu ul {
+      padding: 0;
+    position: absolute;
+
+    left: 0;
+    width: 150px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transiton: opacity 0.2s;
+    -moz-transition: opacity 0.2s;
+    -ms-transition: opacity 0.2s;
+    -o-transition: opacity 0.2s;
+    -transition: opacity 0.2s;
+    
+  }
+  .menu ul li { 
+    background: #555; 
+    display: block; 
+    color: #fff;
+    text-shadow: 0 -1px 0 #000;
+  }
+  .menu ul li:hover { background: #666; }
+  .menu:hover ul {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .hlayer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.2);
+  }
+
+
+  /* https://github.com/tachyons-css/tachyons-z-index */
+  .z-0 { z-index: 0; }
+  .z-1 { z-index: 1; }
+  .z-2 { z-index: 2; }
+  .z-3 { z-index: 3; }
+  .z-4 { z-index: 4; }
+  .z-5 { z-index: 5; }
+  .z-999 { z-index: 999; }
+  .z-9999 { z-index: 9999; }
+  .z-max { z-index: 2147483647; }
+  .z-inherit { z-index: inherit; }
+  .z-initial { z-index: initial; }
+  .z-unset { z-index: unset; }
+</style>
+<script src="https://cdn.jsdelivr.net/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.min.js"></script>
+<script src="https://cdn.jsdelivr.net/react/15.2.1/react.min.js"></script>
+<script src="https://cdn.jsdelivr.net/react/15.2.1/react-dom.min.js"></script>
+<script src="https://cdn.jsdelivr.net/react/15.2.1/react-dom-server.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.10.3/babel.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.9.1/polyfill.min.js"></script>
+<script src="https://cdn.jsdelivr.net/babel/6.0.16/browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/ace/1.2.3/min/ace.js"></script>
+<script src="https://cdn.jsdelivr.net/showdown/1.4.2/showdown.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+<script id="config" type="text/babel">
+window['config'] = 
+{
+  "elem":  `root`,
+  "docRoot":  `CV`,
+  "title":  `radiatr`,
+  "stylesheets":  [
+    `https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.0.2/tachyons.min.css`
+  ],
+  "scriptsLocal":  [
+    `libs/jquery.js`,
+    `libs/lodash.js`,
+    `libs/react.js`,
+    `libs/react-dom.js`,
+    `libs/react-dom-server.min.js`,
+    `libs/babel.min.js`,
+    `libs/polyfill.min.js`,
+    `libs/browser.min.js`,
+    `libs/ace.js`,
+    `libs/showdown.min.js`
+  ],
+  "scripts":  [
+    `https://cdn.jsdelivr.net/jquery/3.1.0/jquery.min.js`,
+    `https://cdn.jsdelivr.net/lodash/4.13.1/lodash.min.js`,
+    `https://cdn.jsdelivr.net/react/15.2.1/react.min.js`,
+    `https://cdn.jsdelivr.net/react/15.2.1/react-dom.min.js`,
+    `https://cdn.jsdelivr.net/react/15.2.1/react-dom-server.min.js`,
+    `https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.10.3/babel.min.js`,
+    `https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/6.9.1/polyfill.min.js`,
+    `https://cdn.jsdelivr.net/babel/6.0.16/browser.min.js`,
+    `https://cdn.jsdelivr.net/ace/1.2.3/min/ace.js`,
+    `https://cdn.jsdelivr.net/showdown/1.4.2/showdown.min.js`
+  ],
+  "datasets":  [
+    `data`,
+    `components`,
+    `app-css`
+  ]
+} ;
+</script>
+<script id="data-settings" type="text/babel">
+window['data-settings'] = 
+{
+  "dataset":  `data`,
+  "radiatr":  {
+    "editor":  `DataEdit`
+  } 
+} ;
+</script>
+<script id="data" type="text/babel">
+window['data'] = 
+{
+undefined
+} ;
+</script>
+<script id="components-settings" type="text/babel">
+window['components-settings'] = 
+{
+  "dataset":  `components`,
+  "functions":  `function() {
+    var self = {};
+    self.registerComponent =  function(component, name){
+      var presets = { presets: ['es2015', 'react'] };
+      var compCode = "window['" + name + "'] = React.createClass(" + component + ")";
+      compCode = Babel.transform(compCode, presets).code;
+
+      eval(compCode)
+    }
+
+    self.registerComponents = function(components){
+      _.forEach(components, self.registerComponent);
+    };
+
+    return self;
+  }`,
+  "hooks":  {
+    "onInit":  `registerComponents`
+  } ,
+  "radiatr":  {
+    "editor":  `ComponentEditor`
+  } 
+} ;
+</script>
+<script id="components" type="text/babel">
+window['components'] = 
+{
+  "RadiatrRoot":  `{
+    init: function(){
+      let self = this;
+      let {datasets} = this.props;
+      let state = {funcs: {}};
+
+      _.forEach(datasets, function(ds, name){
+        state.funcs[name] = ds.q;
+        state[name] = ds.data;
+        ds.q.registerCallback('onChange', function(data){
+          var tmpState = {};
+          tmpState[name] = data;
+          self.setState(tmpState);
+        })
+      });
+
+      return state;
+    },
+    getInitialState: function(){
+      return this.init();
+    },
+    render: function(){
+      let {datasets} = this.state;
+      let self = this;
+
+      let dsEditors = _.map(this.props.datasets, function(ds){
+        let {name, editor} = ds.q.getInfo();
+
+        return (
+          <div label={name} key={name}>
+            {React.createElement(window[editor], {data: self.state[name], q: self.state.funcs[name], path: [], root:  self })}
+          </div>
+        );
+      });
+
+      return (
+        <div className="cf">
+
+          <div className="fl w-50">
+            <Output data={self.state.data} q={self.state.funcs.data} />
+          </div>
+
+          <div className="fl w-50 pa3">
+            <h1 className="f1 tracked tr fw1 bb bw1 b--silver fw1">radiatr</h1>
+            <RadiatrControls data={self.state.data} />
+            <Tabs selected="0">
+              {dsEditors}
+            </Tabs>
+          </div>
+        </div>
+      )
+    }
+  }`,
+  "Output":  `{
+    render: function(){
+      let {data, q} = this.props;
+      return (
+        <h1>App</h1>
+      )
+    }
+  }`,
+  "ToggleMenu":  `{
+    toggleVisibility: function(){
+      var visible = this.state.visible;
+
+      if (visible) {
+        window.removeEventListener('click', this.onClick);
+      } else {
+        window.addEventListener('click', this.onClick);
+      };
+
+      this.setState({visible: !visible}) 
+    },
+    onClick: function(evnt){ 
+      //http://stackoverflow.com/questions/32553158/detect-click-outside-react-component
+      var thisNode = ReactDOM.findDOMNode(this)
+      if( !thisNode.contains(evnt.target))
+        this.toggleVisibility();
+    },
+    getInitialState: () => ( {visible: false} ),
+    render: function(){
+      let cnames = cn(
+        'relative',
+        (this.state.visible ? '' : 'no-display')
+      );
+
+      return (
+        <div className="">
+          <a onClick={this.toggleVisibility}> 
+            ✎
+          </a>
+          <div className={cn(cnames, 'z-1')}on>
+            {this.props.children}
+          </div>
+        </div>
+      )
+    }
+  }`,
+  "RawEdit":  `{
+    save: function(){
+      let evaledCode;
+      this.props.q.updateValue([], this.editor.getValue());
+    },
+    setEditOptions: function(option){
+      this.editor.setOptions(option)
+    },
+    componentDidMount: function(){
+      this.editor = ace.edit('editor');
+      this.editor.setTheme("ace/theme/clouds");
+      this.editor.getSession().setMode("ace/mode/javascript");
+      this.editor.$blockScrolling = Infinity;
+      this.editor.setShowPrintMargin(false);
+      this.setEditOptions({
+        minLines: 25,
+        maxLines: 50,
+        fontSize: "14pt",
+      });
+      this.editor.setValue(pPrint(this.props.data))
+    },
+    render: function(){
+      var self = this;
+      let {data} = this.props;
+
+      return (
+        <div className="cf"> 
+          <div className="fl w-100">
+            <button className="btn" onClick={this.save}>
+              save
+            </button>
+          </div>
+          <div className="fl w-100" id="editor"> 
+          </div>
+        </div>
+      )
+
+    }
+  }`,
+  "ComponentEditor":  `{
+    updateCurrentComponent: function(){
+      let {selected, buffer} = this.state;
+      let val = this.editor.getValue();
+      this.props.q.registerComponent(val, selected );
+      this.props.root.forceUpdate();
+      this.props.q.updateValue([selected], val);
+    },
+    newComponent: function(name){
+      this.props.q.addKey([], name, newComponentTemplate(name))
+      return "";
+    },
+    setEditOptions: function(option){
+      this.editor.setOptions(option)
+    },
+    onComponentChange: function(key){
+      if(this.props.data[this.state.selected] != this.editor.getValue()) {
+        var buffer = this.state.buffer;
+        buffer[this.state.selected] = this.editor.getValue();
+        this.setState({buffer: buffer});
+      };
+
+      this.setState({selected: key});
+      this.updateEditorValue(key);
+    },
+    updateEditorValue: function(key){
+      var value;
+      if(_.has(this.state.buffer, key)){
+        value =this.state.buffer[key]; 
+      } else {
+        value = this.props.data[key]
+      }
+       this.editor.setValue(value);
+    },
+    componentDidMount: function(){
+      this.editor = ace.edit('editor');
+      this.editor.setTheme("ace/theme/clouds");
+      this.editor.getSession().setMode("ace/mode/javascript");
+      this.editor.$blockScrolling = Infinity;
+      this.editor.setShowPrintMargin(false);
+      this.setEditOptions({
+        minLines: 25,
+        maxLines: 50,
+        fontSize: "14pt",
+      })
+      this.editor.setValue(this.props.data[this.state.selected]);
+    },
+    getInitialState: function(){
+      return {
+        selected: _.keys(this.props.data)[0],
+        buffer: {},
+      }
+    },
+    render: function(){
+      var self = this;
+      let {data} = self.props;
+      let buffer = self.state.buffer;
+
+      return (
+        <div className="dt w-100">
+          <div className="dtc w-25">
+            <ComponentList 
+              components={data} 
+              selected={self.state.selected}
+              buffer={buffer} 
+              onClick={this.onComponentChange} 
+              newComponent={this.newComponent}/>
+          </div>
+          
+          <div className="dtc w-75 pl3 pt3">
+            <ComponentEditorFileControls 
+              updateComponent={self.updateCurrentComponent}  
+              setOption={self.setEditOptions}/>
+            
+            <div id="editor">
+            </div>
+          
+          </div>
+        </div>
+      )
+    },
+  }`,
+  "ComponentEditorFileControls":  `{
+    onApply: function(){
+      this.props.updateComponent();
+    },
+    setFontSize: function(size){
+      this.props.setOption({fontSize: size});
+    },
+    render: function(){
+      let self = this;
+      let itmClass = "f6 f5-ns b db pa2 link dim dark-gray ba b--black-20";
+
+      let fontSizes = _.map(_.range(12, 18), (n) => n+"pt" );
+
+      let listCn = "dib mb1 mr3"
+
+      return (
+        <ul className="list ma0 pl0 pb2">
+          <li className={listCn}>
+            <a href="#" className={itmClass} onClick={self.onApply}>
+              Apply
+            </a>
+          </li>
+
+          <li className={listCn}>
+            <div className="f6 b">
+              font size
+            </div>
+            <div>
+              <Dropdown 
+                options={fontSizes}
+                value={fontSizes[0]}
+                onChange={self.setFontSize}/>
+            </div>
+          </li>
+
+        </ul>
+      )
+    },
+  }`,
+  "ComponentList":  `{
+    onClick: function(key, evnt){
+      evnt.preventDefault();
+      this.props.onClick(key);
+    },
+    newComponent: function(name){
+      this.props.newComponent(name)
+      return "";
+    },
+    render: function(){
+      var self = this;
+      let {components, buffer} = self.props;
+
+      var compList = _.map(components, function(comp, key){
+        let modIndic = _.has(buffer, key) ? '•' : "";
+        let cNames = cn(
+          "ph3 pv3 bb b--light-silver",
+          (key == self.props.selected) ? 'b' : ''
+        );
+        return (
+          <li className={cNames} key={key} onClick={self.onClick.bind(self, key)}>{key}{modIndic}</li>
+        )
+      })
+
+      return (
+        <div>
+          <TextInputButton onClick={this.newComponent} placeholder="new component" buttonValue="add"/>
+          <ul className="list pl0 ml0 center mw6 ba b--light-silver br2">
+            {compList}
+          </ul>
+        </div>
+        
+      );
+    }
+  }`,
+  "TextInputButton":  `{
+    onChange: function(evnt){
+      this.setState({value: evnt.target.value})
+    },
+    onClick: function(evnt){
+      this.setState({value: this.props.onClick(this.state.value)});
+    },
+    getInitialState: function(){
+      return {value: this.props.value || ""};
+    },
+    render: function(){
+      return (
+        <div>
+          <input className="inpt" 
+                     type="text" 
+                     value={this.state.value} 
+                     onChange={this.onChange}
+                     placeholder={this.props.placeholder}/>
+          <button className="btn" onClick={this.onClick}>
+            {this.props.buttonValue || "ok"}
+          </button>
+        </div>
+      )
+    }
+  }`,
+  "RadiatrControls":  `{
+    onSave: function(e){
+      saveToFile()
+    },
+    onSaveStatic: function(e){
+      saveStaticDoc();
+    },
+    pData: function(){
+      console.log(this.props.data)
+    },
+    render: function(){
+      let btnClass="btn fr ml2";
+      return (
+        <div className="cf">
+          <button className={btnClass} onClick={this.onSave} >
+            Save
+          </button>
+          <button className={btnClass} onClick={this.onSaveStatic}>
+            Save static doc
+          </button>
+          <button className={btnClass} onClick={this.pData}>
+            debug data
+          </button>
+        </div>
+      )
+    }
+  }`,
+  "Tabs":  `{
+    getInitialState: function(){
+      return {
+        selected: this.props.selected || 0
+      };
+    },
+    onClick: function(indx, evnt){
+      evnt.preventDefault();
+      this.setState({selected: indx})
+    },
+    render: function(){
+      var self = this;
+
+      var tabList = _.map(self.props.children, function(child, index){
+        var  cNames = "link dim black f1 dib mr5";
+        if (index == self.state.selected)
+          cNames += " bb bw2 b--silver "
+
+        return (
+          <a className={cNames} key={index} href="#" onClick={self.onClick.bind(self, index)}>
+            {child.props.label}
+          </a>
+        )
+      })
+      var content = self.props.children[self.state.selected];
+
+      return (
+        <div className="">
+          <div className="bb bw1 b--silver mb2 nowrap overflow-x-auto">
+            {tabList}
+          </div>
+          <div className="pa3 pt1">
+            {content}
+          </div>
+          
+        </div>
+      )
+    }
+  }`,
+  "DataEdit":  `{
+    render: function(){
+      var self = this;
+      let {data, q, path} = self.props;
+
+      var Editor = React.createElement(window[q.getType(path) + "Editor"], {data: data, q: q, path: path });
+      
+      return (
+        <div>
+          {Editor}
+        </div>
+      )
+    }
+  }`,
+  "ObjectEditor":  `{
+    modKey: function(path, newVal, evnt){
+      this.props.q.modKey(path, newVal);
+      return newVal
+    }, 
+    addKey: function(path, newVal, evnt){
+      this.props.q.addKey(path, newVal);
+      return "";
+    },
+    deleteKey: function(path, evnt){
+      if (window.confirm("Delete key?")) {
+        this.props.q.delKey(path);
+      };
+      
+    },
+    changeKeyType: function(path, newType, evnt){
+      if (window.confirm("Change type? value will be deleted")){
+        this.props.q.changeType(path, newType)
+      };
+    },
+    getOptsMenu: function(path){
+      let self = this;
+      let {q} = self.props;
+
+      let dType = q.getType(path);
+      let types = q.getTypes();
+
+      let opts = [
+        (<a onClick={self.deleteKey.bind(self, path)}>Delete</a>),
+        (<div>
+          Data type: <Dropdown options={_.keys(types)} value={dType} onChange={self.changeKeyType.bind(self, path)} />
+         </div>
+        ),
+      ];
+
+      let optsUI = _.map(opts, (opt, i) => {
+        return (
+          <li key={i}>
+            {opt}
+          </li>
+        )
+      })
+
+      return (
+        <div className="ba b--silver bg-white pa2 ma0">
+          <h3 className="mt0">Properties</h3>
+          <ul className="list pl0">
+            {optsUI}
+          </ul>
+        </div>
+      );
+    },
+    render: function(){
+      var self = this;
+      let {data, q, path} = self.props;
+
+
+      var keyVal = _.map(data, function(val, key){
+        var _path = path.concat(key)
+        let optsMenu = self.getOptsMenu(_path);
+
+        return (
+          <div key={key} className="cf">
+            <div className="cf w-100">
+              <div className="fl w-25">
+                <TextInput val={key} 
+                           placeholder={key} 
+                           onSave={self.modKey}
+                           ctrls={optsMenu}
+                           path={_path} />        
+              </div>
+              <div className="fr w-75">
+                <DataEdit data={val} q={q} path={_path} />
+              </div>
+            </div>
+          </div>
+        );
+      });
+
+      return (
+        <div className="w-100">
+          {keyVal}
+          <div className="w-25">
+            <TextInput val="" placeholder="new key" onSave={this.addKey} path={path}/>
+          </div>
+        </div>
+      );
+    },
+  }`,
+  "TextInput":  `{
+    onChange: function(e){
+      this.setState({val: e.target.value});
+      if(e.target.value === this.props.data){
+        this.setState({mod: false});
+      } else {
+        this.setState({mod: true});
+      }
+    },
+    onSave: function(e){
+      let newVal = this.props.onSave(this.props.path, this.state.val);
+      this.setState({val: newVal, mod:false});
+    },
+    onMouseOver: function(e){
+      this.setState({hover: true});
+    },
+    onMouseOut: function(e){
+      this.setState({hover: false});
+    },
+    onFocus: function(e){
+      this.setState({focused: true});
+    },
+    onBlur: function(e){
+      this.setState({focused: false});
+    },
+    getInitialState: function(){
+      return {
+        val: this.props.val || "",
+        mod: false,
+        hover: false,
+        focused: false,
+      };
+    },
+    render: function(){
+      var saveCtrls;
+      if (this.state.mod && !(this.state.val === "")) {
+        saveCtrls = (
+          <a className="fl" onClick={this.onSave}>
+            ✓
+          </a>
+        )
+      };
+      
+      let {hover, focused} = this.state;
+
+      let propsBtn = cn(
+        "fl dib absolute f8",
+        (hover || focused ? '' : 'no-display')
+      );
+
+      let ctrls;
+      if (this.props.ctrls) {
+        ctrls = (
+          <div className="fl">
+            <ToggleMenu>
+              {this.props.ctrls}
+            </ToggleMenu>
+          </div>
+        ) 
+      };
+
+      return(
+        <div className="cf mr3 relative pr3">
+          <div className="w-100 fr dib">
+            <input className="inpt w-100 tr" 
+                   type="text" 
+                   value={this.state.val} 
+                   onChange={this.onChange}
+                   onMouseOver={this.mouseOver}
+                   onMouseOut={this.mouseOut}
+                   onFocus={this.onFocus}
+                   onBlur={this.onBlur}
+                   placeholder={this.props.placeholder}/>
+          </div>
+          <div className="fl cf absolute f8">
+            {ctrls}
+            {saveCtrls}
+          </div> 
+        </div>
+      )
+    },
+  }`,
+  "ArrayEditor":  `{
+    addArray: function(path, evnt){
+      this.props.q.addArray(path);
+    },
+    deleteEntry: function(path, evnt){
+      if (window.confirm("Delete value?")) {
+        this.props.q.delKey(path);
+      };
+    },
+    changeEntryType: function(path, newType, evnt){
+      if (window.confirm("Change type? value will be deleted")){
+        this.props.q.changeType(path, newType)
+      };
+    },
+    moveEntry: function(path, newPos, evnt){
+      this.props.q.moveEntry(path, newPos);
+      this.setState({data: this.props.data});
+    },
+    getInitialState: function(){
+      return {data: this.props.data};
+    },
+    render: function(){
+      var self = this;
+      let {data} = self.state
+      let {q, path} = self.props;
+
+      let opts = [
+        (<a onClick={self.addArray.bind(self, path)}>Add entry</a>),
+      ];
+
+      let optsUI = _.map(opts, (opt, i) => {
+        return (
+          <li key={i}>
+            {opt}
+          </li>
+        )
+      });
+
+      let propsButton = (
+        <div className="fl">
+          <ToggleMenu>
+            <div className="ba b--silver bg-white pa2 ma0">
+              <h3 className="mt0">Properties</h3>
+              <ul className="list pl0">
+                {optsUI}
+              </ul>
+            </div>
+          </ToggleMenu>
+        </div>
+      )
+
+      var getRowClass = function(index){
+        if(index%2==0){
+          return {
+            row: "bg-black-10",
+            num: "black-10"
+          }
+        }else{
+          return {
+            row: "bg-black-20",
+            num: "black-10"
+          }
+        }
+      }
+
+
+      var itmList = _.map(data, function(val, index){
+        var _path = path.concat(index);
+        let {row, num} = getRowClass(index);
+
+        let dType = q.getType(_path);
+        let types = q.getTypes();
+        
+        let opts = [
+          (<a onClick={self.deleteEntry.bind(self, _path)}>Delete</a>),
+          (<div>
+            Data type: <Dropdown options={_.keys(types)} value={dType} onChange={self.changeEntryType.bind(self, _path)} />
+           </div>
+          ),
+          (<a onClick={self.moveEntry.bind(self, _path, (index-1))}>move up</a>),
+          (<a onClick={self.moveEntry.bind(self, _path, (index+1))}>move down</a>),
+        ];
+
+        let optsUI = _.map(opts, (opt, i) => {
+          return (
+            <li key={i}>
+              {opt}
+            </li>
+          )
+        });
+
+        let propsButton = (
+          <div className="fl">
+            <ToggleMenu>
+              <div className="ba b--silver bg-white pa2 ma0">
+                <h3 className="mt0">Properties</h3>
+                <ul className="list pl0">
+                  {optsUI}
+                </ul>
+              </div>
+            </ToggleMenu>
+          </div>
+        )
+
+        return (
+          <div className={"cf w-100 relative "  + row} key={index}>
+
+              <div className={"fl absolute w-auto f1 fw1 b ma1 " + num}>
+                {index}
+              </div>
+
+              <div className="cf mr3 relative pr3">
+                <div className="w-100 fr dib pl3">
+                  <div className="w-100">
+                    <DataEdit data={val} q={q} path={_path} />
+                  </div>
+                </div>
+
+              <div className="fl cf absolute">
+                {propsButton}
+              </div> 
+            </div>
+          </div>
+        )
+      });
+
+      return (
+        <div className="cf mr3 relative pr3">
+          <div className="w-100 fr dib pl3">
+            <div className="ma1 ba bw1 b--silver w-100">
+              {itmList}
+            </div>
+          </div>
+          <div className="fl cf absolute">
+            {propsButton}
+          </div> 
+        </div>
+      )
+
+    },
+  }`,
+  "ValueEditor":  `{
+    onChange: function(e){
+      this.setState({val: e.target.value})
+      this.props.q.updateValue(this.props.path, e.target.value)
+    },
+    getInitialState: function(){
+      return {
+        val: this.props.data || ""
+      }
+    },
+    componentWillReceiveProps: function(props) {
+      this.setState({val: props.data})
+    },
+    render: function(){
+      var types = _.keys(this.props.q.getTypes());
+      return (
+        <div className="cf w-100">
+          <div className="fl w-100">
+            <input className="w-100 inpt" type="text" value={this.state.val} onChange={this.onChange} />
+          </div>
+        </div>
+      )
+    }
+  }`,
+  "Dropdown":  `{
+    onChange: function(e){
+      this.setState({value: e.target.value});
+      this.props.onChange(e.target.value);
+    },
+    getInitialState: function(){
+      return {
+        value: this.props.value || null
+      }
+    },
+    render: function(){
+      var options = _.map(this.props.options, function(o, i){
+        return (
+          <option key={i} value={o}>{o}</option>
+        )
+      });
+
+      return (
+        <select className="inpt" onChange={this.onChange} value={this.state.value}>
+          {options}
+        </select>
+      )
+    },
+  }`,
+  "CV":  `{
+    render: function(){
+      let {data} = this.props;
+      let mdConverter = new showdown.Converter();
+
+      return (
+        <div className="mw9 center pa3 ph5-ns">
+          <CVHeader name={data.name}/>
+          <ContactList contactInfo={data.contact} />
+          <div className="pa4">
+              <CVSection title={data.skills.title}>
+                <VList elems={data.skills.content} />
+              </CVSection> 
+              <CVSection title={data.education.title}>
+                <ChronoList elems={data.education.content} />
+              </CVSection>
+              <CVSection title={data.profExp.title} >
+                <ChronoList elems={data.profExp.content} mdConverter={mdConverter}/>
+              </CVSection>
+          </div>
+        </div>
+      )
+    },
+  }`,
+  "CVHeader":  `{
+    render: function() {
+      let {name} = this.props;
+      return (
+        <div className="bb bw1 mb3 b--light-silver" >
+          <h1 className="f1 fw1 tracked tr mb0">{name}</h1>
+        </div>
+      );
+    }
+  }`,
+  "ContactList":  `{
+    render: function(){  
+      
+      let contact = _(this.props.contactInfo)
+        .map( (info) => info.val )
+        .reduce( (info, accum) => info + " // " + accum )
+      
+      return (
+        <div className="fr">
+          {contact}
+        </div>
+      )
+    }
+  }`,
+  "ContactBox":  `{
+    render: function() {
+      let {contactInfo} = this.props;
+
+      var boxContent = contactInfo.map(function(info){
+        return (
+          <li key={info.name} className="cf f5 pb3">
+            <div className="fl">{info.name}</div>
+            <div className="fr">{info.val}</div>
+          </li>  
+        );
+      })
+
+      return (
+        <div className="w-25 ba bw1 b--light-silver fr pa3 dib">
+          <h2 className="f3 mt0 tc">Contact Information</h2>
+          <ul className="list pa0 ma0">
+            {boxContent}
+          </ul>
+        </div>
+      )
+
+    }
+  }`,
+  "CVSection":  `{
+    render: function(){
+      return (
+        <div className="fl mb5 w-100">
+          <div className="dt mb3">
+            <div className="dtc" style={{whiteSpace: "nowrap"}}>
+              <h2 className="tl f3 fw5 mb2 mt0 fw1 tracked w-100"
+                  >
+                {this.props.title}
+              </h2>
+            </div>
+            <div className="dtc w-100 v-mid pl2">
+              <div className="bb w-100 b--light-silver"></div>
+            </div>
+          </div>
+        
+          {this.props.children}
+        </div>
+      )
+    }
+  }`,
+  "VList":  `{
+    render: function(){
+      let listElems = _.map(this.props.elems, function(elem, i){
+        return <li key={i} className="mb2">{elem}</li>
+      })
+      return (
+        <ul className="pa0 ma0 pb2 mb2 pl4">
+          {listElems}
+        </ul>
+      )
+    }
+  }`,
+  "ChronoList":  `{
+    render: function(){
+      let self = this;
+      let {elems, mdConverter} = this.props;
+
+      let listElems = _.map(elems, function(elem, i){
+        return (
+          <li key={i} className="cf w-100 mb4">
+            <div className="fl w-100-l w-20  b pr2 pb1">{elem.date}</div>
+            <div className="fl w-100-l w-20 i pr4 pb1">{elem.title}</div>
+            <div className="fl w-100-l w-60" >
+              {mdConverter
+                ? <MDBlock mdConverter={mdConverter} data={elem.desc} />
+                : elem.desc
+              }
+            </div>
+          </li>
+        )
+      })
+
+      return (
+        <ul className="cf w-100 list pa0 mb0 pl4 mt0">
+          {listElems}
+        </ul>
+      )
+    }
+  }`,
+  "MDBlock":  `{
+    render: function(){
+      let self = this;
+      let {data, mdConverter} = this.props;
+
+      let rendered = mdConverter.makeHtml(data);
+            
+      return (
+        <div dangerouslySetInnerHTML={ {__html: rendered}}></div>
+      )
+    }
+  }`
+} ;
+</script>
+<script id="app-css-settings" type="text/babel">
+window['app-css-settings'] = 
+{
+  "dataset":  `app-css`,
+  "functions":  `function() {
+      var self = {};
+
+      self.applyCSS = function(data){
+        $("#app-css").html(data);
+        return data;
+      };
+
+      return self;
+    }`,
+  "hooks":  {
+    "postUpdate":  `applyCSS`
+  } ,
+  "radiatr":  {
+    "editor":  `RawEdit`,
+    "saveData":  `function saveData(ds) {
+      return saveCSSDS(ds);
+    }`
+  } 
+} ;
+</script>
+<script type="text/babel">
+window['app-css'] = 
+`
+  .btn,
+  .btn:link,
+  .btn:visited {
+    border-style: solid;
+    border-width: 1px;
+    color: #111;
+    display: inline-block;
+    letter-spacing: .15em;
+    margin-bottom: .5em;
+    padding: 0.25em 1em;
+    text-decoration: none;
+    -webkit-transition: color .4s, background-color .4s, border .4s;
+            transition: color .4s, background-color .4s, border .4s;
+  }
+
+  .btn:hover {
+    color: #000;
+    border: 1px solid #000;
+    -webkit-transition: background-color .3s, color .3s, border .3s;
+            transition: background-color .3s, color .3s, border .3s;
+  }
+
+  .btn:active {
+    color: #000;
+    border: 1px solid #000;
+    -webkit-transition: background-color .3s, color .3s, border .3s;
+            transition: background-color .3s, color .3s, border .3s;
+  }
+
+
+  .inpt{
+    margin:3px;
+    border:0;
+    padding:2px;
+    display:inline-block;
+    vertical-align:middle;
+    white-space:normal;
+    background:none;
+    line-height:1;
+    border-bottom: 1px solid #aaa;
+    font-family:Arial;
+  }
+
+  .inpt:focus {
+    outline:0;
+    border-bottom: 1px solid #555;
+  }
+
+  .static { position: static; }
+  .relative { position: relative; }
+  .absolute { position: absolute; }
+  .fixed { position: fixed; }
+  @media screen and (min-width: 48em) {
+   .static-ns { position: static; }
+   .relative-ns { position: relative; }
+   .absolute-ns { position: absolute; }
+   .fixed-ns { position: fixed; }
+  }
+  @media screen and (min-width: 48em) and (max-width: 64em) {
+   .static-m { position: static; }
+   .relative-m { position: relative; }
+   .absolute-m { position: absolute; }
+   .fixed-m { position: fixed; }
+  }
+  @media screen and (min-width: 64em) {
+   .static-l { position: static; }
+   .relative-l { position: relative; }
+   .absolute-l { position: absolute; }
+   .fixed-l { position: fixed; }
+  }
+
+  .f7 {
+    font-size: .75rem;
+  }
+
+  .f8 {
+    font-size: .70rem;
+  }
+
+
+  .no-display {
+    display: none;
+  }
+
+
+
+  .menu{
+    text-align: left;
+    display: inline;
+    margin: 0;
+    padding: 15px 4px 17px 0;
+    list-style: none;
+    -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+    font: bold 12px/18px sans-serif;
+    display: inline-block;
+    margin-right: -4px;
+    position: relative;
+    padding: 15px 20px;
+    background: #fff;
+    cursor: pointer;
+    -webkit-transition: all 0.2s;
+    -moz-transition: all 0.2s;
+    -ms-transition: all 0.2s;
+    -o-transition: all 0.2s;
+    transition: all 0.2s;
+  }
+
+  .menu:hover {
+    background: #555;
+    color: #fff;
+  }
+
+  .menu ul {
+      padding: 0;
+    position: absolute;
+
+    left: 0;
+    width: 150px;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transiton: opacity 0.2s;
+    -moz-transition: opacity 0.2s;
+    -ms-transition: opacity 0.2s;
+    -o-transition: opacity 0.2s;
+    -transition: opacity 0.2s;
+    
+  }
+  .menu ul li { 
+    background: #555; 
+    display: block; 
+    color: #fff;
+    text-shadow: 0 -1px 0 #000;
+  }
+  .menu ul li:hover { background: #666; }
+  .menu:hover ul {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .hlayer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.2);
+  }
+
+
+  /* https://github.com/tachyons-css/tachyons-z-index */
+  .z-0 { z-index: 0; }
+  .z-1 { z-index: 1; }
+  .z-2 { z-index: 2; }
+  .z-3 { z-index: 3; }
+  .z-4 { z-index: 4; }
+  .z-5 { z-index: 5; }
+  .z-999 { z-index: 999; }
+  .z-9999 { z-index: 9999; }
+  .z-max { z-index: 2147483647; }
+  .z-inherit { z-index: inherit; }
+  .z-initial { z-index: initial; }
+  .z-unset { z-index: unset; }
+`;
+</script>
+<script id="radiatr" type="text/babel">
+  var radiatr;
+  
+  var evalES6 = function(code){
+    var evaled;
+    eval(Babel.transform(("evaled = " + code), 
+                         {presets: ['es2015', 'react']}).code);
+    return evaled;
+  };
+
+  var saveCSSDS = function(ds){
+      let content = "window['" + ds.q.getSettings().dataset + "'] = \n" + wrapTemplate(pPrint(ds.q.getData()))  + ";";
+
+      return {
+        css: ["<style type='text/css' id='" + ds.q.getSettings().dataset + "'>" + pPrint(ds.q.getData()) + "</style>"], 
+        body: ['<script type="text/babel">\n' + content + "\n" + "</" + "script>"]
+      }
+  };
+
+  var newComponentTemplate = function(name){
+    return `{
+  render: function(){
+    return (
+      <div>${name}</div>
+    )
+  }
+}`
+  };
+
+  var promptForSave = function(content){
+    var el = document.createElement('a');
+    el.setAttribute('href', 
+                    'data:text/plain;charset=utf-8,' 
+                    + encodeURIComponent(content));
+    
+    el.setAttribute('download', 'index.html');
+    el.style.display = 'none';
+
+    document.body.appendChild(el);
+    el.click();
+    document.body.removeChild(el);
+  };
+
+  var generateFile = function(content){
+    let indent= "  ";
+    //defaults
+    let {
+      title       = 'radiatr',
+      meta        = `<meta charset="utf-8" />`,
+      datasets    = [], 
+    } = content;
+
+    var body    = [], 
+        css     = [], 
+        scripts = [];
+   
+    let tmp =  _(datasets)
+                  .map(function(ds){
+                    return ds.q.saveDataset(ds);
+                  }).value()
+
+    _.forEach(tmp, function(v){
+      if(_.has(v, "body"))    body = body.concat(v["body"])
+      if(_.has(v, "css"))     css = css.concat(v["css"])
+      if(_.has(v, "scripts"))  scripts = scripts.concat(v["scripts"])
+    })
+
+    body =    _.reduce(body, (x, y) => `${x}\n${y}`)
+    css =     _.reduce(css, (x, y) => `${x}\n${y}`)
+    scripts = _.reduce(scripts, (x, y) => `${x}\n${y}`)
+    
+    let head = `<title>${title}</title>\n${meta}\n${css}\n${scripts}`
+    let bodyContent = `<div id="root"></div>\n${body}\n`
+
+    let fileContent = `<!DOCTYPE html>\n<html>\n<head>\n${head}\n</head>\n<body>\n${bodyContent}\n</body>\n<\html>`
+
+    return  fileContent
+  };
+
+  var saveToFile = function(){
+    let datasets = radiatr.getDatasets()
+    let currConf = datasets['config'].q.getData();
+
+    let fileContent = {
+      title:        currConf.title,
+      stylesheets:  currConf.stylesheets,
+      scripts:      currConf.scripts,
+      datasets:     datasets,
+                     
+    }
+    promptForSave(generateFile(fileContent))
+  };
+
+  var generateStaticDoc = function(content){
+    //defaults
+    let {
+      title       = 'radiatr',
+      meta        = `<meta charset="utf-8" />`,
+      stylesheets = [],
+      body        = ""
+    } = content;
+
+    let cssImports = _(stylesheets)
+                        .map((ss) => `<link rel="stylesheet" href="${ss}">`)
+                        .reduce((x, a) => `${x} \n        ${a}`);
+
+
+    let fileContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>${title}</title>
+        ${meta}
+        ${cssImports}
+      </head>
+      <body>
+        ${body}
+      </body>
+      </html>
+    `
+
+    return  fileContent
+  }
+
+  var saveStaticDoc = function(){
+    let datasets = radiatr.getDatasets()
+    let currConf = datasets['config'].q.getData();
+    let body = ReactDOMServer.renderToString(
+      React.createElement(window[currConf.docRoot], {data: datasets.data.data})
+    )
+    
+    let fileContent = {
+      title:        currConf.title,
+      title:        currConf.title,
+      stylesheets:  currConf.stylesheets,
+      body:         body
+
+    };
+
+    promptForSave(generateStaticDoc(fileContent))
+  };
+
+  var cn = function(){
+    return _.chain(arguments)
+            .flattenDeep()
+            .map(function(d){
+              if(typeof(d) == 'object')
+                return _.map(d, function(v, k){
+                  return v ? k : '';
+                })
+              return d;
+            })
+            .flattenDeep()
+            .reduce(function(d, a){
+              return d + " " + a;
+            })
+            .value()
+  };
+
+  var ils = function(){
+
+    return arguments
+  };
+
+  var pPrint = function(c){
+    let indent = (l) => "  ".repeat(l)
+    var getType = function(v){
+      if ((typeof(v) === 'object') && !Array.isArray(v)) return 'Object';
+      if (Array.isArray(v)) return 'Array';
+      return 'Value';
+    }
+    let toTypeString = {
+      'Object': function(o, l){
+        let self = this;
+        let cnt = _(o)
+                    .map(function(v, k){
+                      let lvl=l+1;
+                      return `${indent(lvl)}"${k}":  ${self[getType(v)](v, lvl)}`
+                    })
+                    .reduce((a, b) => `${a},\n${b}`)
+        return `{\n${cnt}\n${indent(l)}} `
+      },
+      'Array': function(o, l){
+        let self = this;
+        let cnt = _(o)
+                    .map(function(v){
+                      let lvl = l+1
+                      return `${indent(lvl)}${self[getType(v)](v, lvl)}`
+                    })
+                    .reduce((a, b) => `${a},\n${b}`)
+        return `[\n${cnt}\n${indent(l)}]`
+      },
+      'Value': function(o, l){
+        return `\`${o}\``
+      }
+    };
+
+    return _.isString(c) ? c : toTypeString[getType(c)](c, 0);
+  };
+
+  var wrapTemplate = function(v){
+
+    return `\`${v}\``
+  };
+
+  var Container = function(settings){
+    var data;
+    var name;
+    var editor;
+    var functions;
+    var settings = settings;
+    var callbacks = {
+      'onInit':   [],
+      'onChange': [],
+      'postUpdate': [],
+    };
+
+    var types = {
+      'Object': {},
+      'Array': [],
+      'Value': '',
+    };
+
+    var defaultSettings = {
+      dataset: 'data', 
+      radiatr:{
+        editor: 'RawEdit',
+        getData: function(dataset){
+          return window[dataset]
+        },
+        saveData: function(ds){
+          let content = `window['${ds.q.getSettings().dataset}'] = \n${pPrint(ds.q.getData())};`;
+          return {body: [`<script id="${ds.q.getSettings().dataset}" type="text/babel">\n${content}\n` + "</" + "script>"]}
+        },
+      }
+    };
+
+    var registerCallback = function(evnt, cb){
+      if(!_.has(callbacks, evnt)) callbacks[evnt] = [];
+      callbacks[evnt].push(cb);    
+    };
+
+    var trigger = function(evnt, arg){
+      var _arg = arg || data;
+      if(_.has(callbacks, evnt))
+        _.forEach(callbacks[evnt], function(cb){
+          cb(_arg);
+        })
+    };
+
+    var doOn = function(path, cb){
+      var _doOn = function(data, path, cb){
+        if(path.length == 0) return cb(data);
+        var _path = path.slice();
+        var key = _path.shift();
+        data[key] = _doOn(data[key], _path, cb);
+
+        return data
+      }
+      data = _doOn(data, path, cb);
+
+      if(_.has(callbacks, 'postUpdate')){
+        if (callbacks['postUpdate'].length > 0) {
+          _.forEach(callbacks['postUpdate'], function(cb){
+            data = cb(data);
+          });
+        };
+      };
+
+      trigger('onChange', data)
+    };
+
+    var readOn = function(path){
+      var _readOn = function(data, path){
+        if(path.length == 0) return data;
+        var _path = path.slice();
+        var key = _path.shift();
+        return _readOn(data[key], _path); 
+      };
+
+      return _readOn(data, path);
+    };
+
+    var getType = function(path){
+      var _getType = function(v){
+        if ((typeof(v) === 'object') && !Array.isArray(v)) return 'Object';
+        if (Array.isArray(v)) return 'Array';
+        return 'Value';
+      }
+
+      return _getType(readOn(path))
+    };
+
+    var changeType = function(path, newType){
+      var newValue = types[newType];
+      doOn(path, function(d){
+        return newValue;
+      })
+    };
+
+    var updateValue = function(path, value){
+      var value = value;
+      doOn(path, function(d){
+        return value;
+      });
+    };
+
+    var addKey = function(path, key, newValue){
+      var value = newValue || types['Object'];
+      var key = key
+      doOn(path, function(d){
+        let newObj = _.clone(d);
+        newObj[key] = value
+        return newObj;
+      })
+    };
+
+    var modKey = function(path, key){
+      var path = path;
+      var oldKey = path.pop();
+      var newkey = key;
+      doOn(path, function(d){
+        d[newkey] = d[oldKey];
+        delete d[oldKey];
+        return d;
+      });
+    };
+
+    var delKey = function(path){
+      var path = path;
+      var key = path.pop();
+      doOn(path, function(d){
+        delete d[key];
+        return d;
+      })
+    };
+
+    var addArray = function(path, newValue){
+      let val = newValue || "";
+      doOn(path, function(d){
+        d.push(val);
+        return d;
+      })
+    };
+
+
+    var moveEntry = function(path, newPos){
+      var arrayPath = path;
+      var curPos = path.pop();
+      var newPos = newPos;
+
+      doOn(arrayPath, function(d){
+        let arr = d;
+        while(curPos < 0) {
+          curPos += d.length;
+        }
+          
+        while(newPos < 0) {
+          newPos += d.length;
+        }
+        d.splice(newPos, 0, d.splice(curPos, 1)[0])
+        
+
+        return d;
+      });
+    };
+
+    var getTypes = function(){
+
+      return types
+    };
+
+    var getInfo = function(){
+      return {
+        name: name,
+        editor: editor,
+      }
+    };
+
+    var getData = function(){
+
+      return data;
+    }
+
+    var getSettings = function(){
+      return settings;
+    };
+
+    var saveDataset = function(ds){
+      let tmpSettings = _.merge({}, defaultSettings, settings);
+      let save = _.isString(tmpSettings.radiatr.saveData)
+                  ? evalES6(tmpSettings.radiatr.saveData)
+                  : tmpSettings.radiatr.saveData
+
+      return save(ds); 
+    }
+   
+  
+    var init = function(settings){
+      if (_.isString(settings)){
+        let tmpSettings = defaultSettings;
+        tmpSettings.dataset = settings;
+        settings = tmpSettings;
+      }
+
+      let tmpSettings = _.cloneDeep(defaultSettings);
+      tmpSettings = _.merge(defaultSettings, settings);
+
+      data      = tmpSettings.radiatr.getData(settings.dataset);
+      name      = settings.dataset;
+      editor    = settings.radiatr.editor;
+      if(settings.functions){
+        var presets = { presets: ['es2015', 'react'] };
+        var compCode = "functions = " + settings.functions + "()";
+        compCode = Babel.transform(compCode, presets).code;
+
+        eval(compCode)
+      };        
+
+      functions = _.merge(functions, {
+        getInfo: getInfo,
+        getData: getData,
+        doOn: doOn,
+        readOn: readOn,
+        updateValue: updateValue,
+        registerCallback: registerCallback,
+        getType: getType,
+        getTypes: getTypes,
+        addKey: addKey,
+        modKey: modKey,
+        delKey: delKey,
+        addArray: addArray,
+        moveEntry: moveEntry,
+        changeType: changeType,
+        getSettings: getSettings,
+        saveDataset: saveDataset,
+      })
+
+      if( _.has(settings, 'hooks')){
+        _.forEach(settings.hooks, function(cb, h){
+          functions.registerCallback(h, functions[cb])
+        });
+      }
+
+
+      trigger('onInit')
+    };
+
+    init(settings);
+
+    return {
+      data: data,
+      q: functions,
+    }
+  };
+
+  var radiatrCodeContainerSettings = {
+    dataset: 'radiatr',
+    radiatr: {
+      editor: 'RawEdit',
+      getData: function(ds){
+        return $('html').find('#radiatr').html();
+      },
+      saveData: function(ds){
+        return {body: [`<script id="radiatr" type="text/babel">` + ds.q.getData() + "</" + "script>"]};
+      },
+    }
+  };
+
+  var evaledContainerSettings = {
+    functions: `function() {
+      var self = {};
+
+      self.evalUpdate = function(data){
+        return evalES6(data);
+      };
+
+      return self;
+    }`, 
+    hooks: {
+      'postUpdate': 'evalUpdate'
+    },
+    radiatr: {
+      editor: 'RawEdit',
+    }
+  };
+
+  var configContainerSettings = {
+    'dataset': 'config',
+    radiatr: {
+      saveData: function(ds){
+        let data = ds.q.getData();
+        let cssImports = _.map(data.stylesheets, (ss) => `<link rel="stylesheet" href="${ss}">`)
+        let scriptImports = _.map(data.scripts, (sf) => `<script src="${sf}">` + "</" + "script>")
+
+        let content = `window['${ds.q.getSettings().dataset}'] = \n${pPrint(ds.q.getData())};`;
+        let bodyContent = `<script id="${ds.q.getSettings().dataset}" type="text/babel">\n${content}\n` + "</" + "script>";
+
+        return {
+          css: cssImports,
+          scripts: scriptImports,
+          body: [bodyContent],
+        }
+
+      }
+    },
+  };
+
+  var Radiatr = function(){
+    var self            = this;
+    var config;
+    var datasets        = {};
+
+    var getDatasets = function(){
+      return datasets;
+    };
+
+
+    var run = function(){
+      const rootElement = document.getElementById(config.elem)
+
+      ReactDOM.render(
+        <RadiatrRoot datasets={datasets} />,
+        rootElement
+      );
+    };
+
+    var init = function(){
+      config = window["config"];
+
+      datasets['config'] = Container( _.merge({}, evaledContainerSettings, configContainerSettings))
+
+      
+      _(config.datasets)
+        .forEach(function(ds){
+          let settingsName = `${ds}-settings`
+          if(_.has(window, settingsName)){
+            let dsSettings = window[settingsName];
+            datasets[settingsName] = Container( _.merge({}, evaledContainerSettings, {'dataset':  settingsName}))
+            datasets[ds] = Container(dsSettings);
+          } else {
+            datasets[ds] = Container(ds);
+          }
+        });
+
+      datasets['radiatr'] = Container(radiatrCodeContainerSettings);
+    };
+
+    init();
+
+    return {
+      run: run,
+      getDatasets: getDatasets,
+    }
+
+  }
+
+  radiatr = Radiatr();
+  radiatr.run();
+</script>
+
+</body>
+<html>
