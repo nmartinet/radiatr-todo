@@ -336,7 +336,7 @@ window['components'] =
     render: function(){
       let {data, q} = this.props;
       return (
-        <h1>App</h1>
+        <TodoRoot data={data} q={q} />
       )
     }
   }`,
@@ -1180,7 +1180,14 @@ window['components'] =
         <div dangerouslySetInnerHTML={ {__html: rendered}}></div>
       )
     }
-  }`
+  }`,
+  "TodoRoot":  `{
+  render: function(){
+    return (
+      <div>TodoRoot</div>
+    )
+  }
+}`
 } ;
 </script>
 <script id="app-css-settings" type="text/babel">
