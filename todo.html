@@ -1195,15 +1195,31 @@ window['components'] =
 }`,
   "TodoList":  `{
   render: function(){
+    let {todos, q, path} = this.props;
+    
+    let todoList = _.map(todos, function(todo, i){
+      let _path = path.concat(i);
+      return (
+        <TodoEntry key={i}
+                   todo={todo}
+                   path={_path} />
+      );
+    });
+    
     return (
-      <div>TodoList</div>
+      <div>
+        {todoList}
+      </div>
     )
   }
 }`,
   "TodoEntry":  `{
   render: function(){
+    let {todo, q} = this.props;
     return (
-      <div>TodoEntry</div>
+      <div>
+       {todo.name}
+      </div>
     )
   }
 }`,
