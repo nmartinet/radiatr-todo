@@ -13,8 +13,7 @@ An live editable version is available [here]().
 This is not a react tutorial, there are plenty more thourough and better quality tutorials/articles/learning ressources available elsewhere. A basic understanding of react is required. 
 
 ##Step 1 - Getting radiatr.
-You're going to need radiatr to get started. All you need is the single html file. You can get it from the [repo]() or get a copy by opening the [live version here]() and saving it locally (with the save button, not your browser's save fie.  
-Start by gettting radiatr. The current version is available [here](). If you named your file todo.html, you should have the same thing as the step 1 commit.
+You're going to need radiatr to get started. All you need is the single html file. You can get it from the [repo](https://github.com/nmartinet/radiatr) or get a copy by opening the [live version here](https://nmartinet.github.io/radiatr/) and saving it locally (with the save button, not your browser's save file. If you named your file todo.html, you should have the same thing as the step 1 commit.
 
 ###Explanation
 radiatr is downloaded. All the needed dependencies (react, reactdom, lodash, etc...)  are linked from a cdn so you're ready to go.
