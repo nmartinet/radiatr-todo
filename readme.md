@@ -1,4 +1,7 @@
 #Building a to do app with radiatr
+
+[Live version](https://nmartinet.github.io/radiatr-todo/)//[Live Editable Version](https://nmartinet.github.io/radiatr-todo/todo.html)
+
 radiatr is a small application to help quickly create data driven react application and documents. I know, it doesn't really fit the [wikipedia description](https://en.wikipedia.org/wiki/Rapid_application_development), it does tallow for rapid application development, and it deosn't sound too bad as a name - alternative name suggestions are welcome (it used to be reactr but there are already project named reactor).
 
 I feel that a good way to illustrate what it is and how it works is through example. So we're going to build a small to do app. 
